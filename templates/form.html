@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Find Your Dream Job</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" enctype="multipart/form-data" class="job-form">
+            <div class="form-group">
+                <label for="resume">Upload Your Resume (PDF/DOCX):</label>
+                <input type="file" id="resume" name="resume" accept=".pdf,.docx" class="form-control">
+                <small class="form-text">Max file size: 16MB</small>
+            </div>
+            
+            <div class="divider">OR</div>
+            
+            <div class="form-group">
+                <label for="skills">Skills (comma separated):</label>
+                <input type="text" id="skills" name="skills" placeholder="Python, SQL, Machine Learning" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="experience">Experience:</label>
+                <textarea id="experience" name="experience" rows="3" placeholder="2 years as Data Analyst" class="form-control"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="education">Education:</label>
+                <input type="text" id="education" name="education" placeholder="BSc Computer Science" class="form-control">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Find Matching Jobs</button>
+        </form>
+        
+        <div class="sample-resume">
+            <p>Don't have a resume? Try our sample:</p>
+            <a href="{{ url_for('static', filename='sample_resume.pdf') }}" download class="btn btn-secondary">Download Sample Resume</a>
+        </div>
+    </div>
+</body>
+</html>

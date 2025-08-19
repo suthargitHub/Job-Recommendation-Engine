@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Job Matches</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('home') }}" class="back-link">← Back to Search</a>
+        <h1>AI-Powered Job Recommendations</h1>
+        
+        <!-- Resume Info -->
+        <div class="resume-info">
+            <h3>Your Profile Analysis:</h3>
+            <p><strong>Skills:</strong> {{ resume.skills|join(', ') }}</p>
+            <p><strong>Experience:</strong> {{ resume.experience }}</p>
+            <p><strong>Education:</strong> {{ resume.education }}</p>
+        </div>
+        
+        <!-- AI Career Advisor Section -->
+        {% if ai_advice %}
+        <div class="ai-advice-section">
+            <h2>🤖 AI Career Advisor</h2>
+            <div class="ai-advice-content">
+                {{ ai_advice|replace('\n', '<br>')|safe }}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Job Matches -->
+        {% if jobs %}
+        <div class="results-table">
+            <h3>🎯 AI-Matched Jobs</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Location</th>
+                        <th>AI Match Score</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{ job.title }}</td>
+                        <td>{{ job.company }}</td>
+                        <td>{{ job.location }}</td>
+                        <td class="match-score {{ 'high' if job.match_score >= 0.7 else 'medium' if job.match_score >= 0.5 else 'low' }}">
+                            {{ "%.0f"|format(job.match_score * 100) }}%
+                        </td>
+                        <td><a href="{{ job.link }}" target="_blank" class="job-link">View Job</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="no-results">
+            <p>No AI-matched jobs found.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
